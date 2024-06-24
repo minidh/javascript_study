@@ -34,7 +34,7 @@ function movePlayer(e) {
 document.addEventListener("keyup", movePlayer)
 
 let invaderLoc = [
-    0, 1, 2,, 3, 4, 5, 6, 7, 8, 9,
+    0, 1, 2, 3, 4, 5, 6, 7, 8, 9,
     15, 16 ,17, 18, 19, 20, 21, 22, 23, 24,
     30, 31, 32, 33, 34, 35, 36, 37, 38, 39
 ]
@@ -45,8 +45,38 @@ function makeInvader() {
         stage[invader].classList.add("invader");
     })
 }
-makeInvader();
 
-function moveInvader() { }
+function moveInvader() {
+    invaderLoc.forEach(function(invader) {
+        stage[invader].classList.remove("invader");
+    })
+    for(let i=0; i < invaderLoc.length; i++) {
+        invaderLoc[i]++;
+        stage[invaderLoc[i]].classList.add("invader");
+    }
+}
 
-interval = setInterval(moveInvader, 1000);
+function gameStart() {
+    makePlayer();
+    makeInvader();
+    displayStatus();
+    gameInterval = setInterval(moveInvader, 1000);
+    document.addEventListener("keyup", movePlayer);
+    gameRun();
+}
+
+function gameStop() {
+    clearInterval(gameInterval);
+    document.removeEventListener("keyup",movePlayer);
+}
+
+function gameRun() {
+    moveInvader();
+}
+
+function displayStatus() {
+    display.innerText = invaderLoc.length + "/" + invaderLoc.length
+}
+
+startBtn.addEventListener("click", gameStart);
+stopBtn.addEventListener("click", gameStop);
